@@ -143,12 +143,14 @@ pip install -r requirements.txt
 
 ## Configuration
 
-RiseOS reads credentials and sensitive configuration values from environment variables.
+RiseOS reads credentials and user-specific configuration values from environment variables.
 
 The current configuration expects these environment variables when their corresponding integrations are enabled:
 
 ```text
 OPENWEATHER_API_KEY
+WEATHER_CITY
+WEATHER_STATE
 ALPHA_VANTAGE_API_KEY
 ```
 

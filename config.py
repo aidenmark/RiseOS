@@ -7,6 +7,8 @@ import os
 # -----------------------------------------------------------------------------
 OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")
 UNITS = "imperial"
+WEATHER_CITY = os.getenv("WEATHER_CITY")
+WEATHER_STATE = os.getenv("WEATHER_STATE")
 
 # -----------------------------------------------------------------------------
 # Tech Pulse - Hacker News API
