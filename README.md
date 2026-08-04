@@ -1,6 +1,6 @@
 # RiseOS
 
-RiseOS is a modular, Python-based personal morning operating system. It collects information from configured external data sources, monitors and logs system events, exposes briefing data through a REST API, and generates a formatted daily morning brief on an automated schedule.
+RiseOS is a modular, Python-based personal morning operating system. It collects information from configured external data sources, monitors and logs system events, exposes briefing data through a Representational State Transfer (REST) Application Programming Interface (API), and generates a formatted daily morning brief on an automated schedule.
 
 The project is designed so that new data sources and personal modules can be added without restructuring the existing application.
 
@@ -20,6 +20,7 @@ The project demonstrates:
 - Automated task scheduling
 - Error handling
 - Automated testing
+- Secure configuration management
 
 ---
 
@@ -27,10 +28,12 @@ The project demonstrates:
 
 RiseOS contains four primary systems:
 
-- **Event Monitor**: tracks system activity such as CPU usage, memory usage, disk thresholds, and file-system changes
+- **Event Monitor**: tracks selected system activity such as central processing unit (CPU) usage, memory usage, and disk thresholds
 - **Event Logger**: writes system and application events to a SQLite database with a timestamp, source, event type, severity, and description
 - **REST API Layer**: a Flask application that exposes briefing and event data through queryable endpoints
 - **Daily Briefing Generator**: aggregates enabled data sources and the overnight event log into a formatted morning brief
+
+File-system monitoring is deferred until useful monitoring boundaries and privacy rules are defined.
 
 ---
 
@@ -42,14 +45,16 @@ The initial RiseOS morning brief is planned to include:
 |---|---|---|
 | Date and daily intention | Local configuration | In development |
 | Weather | OpenWeatherMap API | In development |
-| Tech news | Hacker News API | Planned |
-| Stocks | Alpha Vantage API | In development |
+| Tech Pulse | Hacker News API | Planned |
+| Market Snapshot | Alpha Vantage API | In development |
+| Music | MusicBrainz API | Planned |
+| Sports events | TheSportsDB API | Planned |
 | Wellness goals | Local configuration | In development |
 | Overnight event summary | SQLite event log | Planned |
-| Sports events | TheSportsDB API | Planned |
-| New music releases | Music provider API | Deferred |
 
-Users will eventually be able to enable, disable, and configure modules according to their own preferences.
+The planned Music section will use user-selected genres to discover recent releases without requiring a music-streaming account.
+
+Users will eventually be able to enable, disable, and configure briefing sections according to their preferences.
 
 ---
 
@@ -61,9 +66,9 @@ Users will eventually be able to enable, disable, and configure modules accordin
 | API Layer | Flask |
 | Database | SQLite |
 | Scheduling | APScheduler |
-| HTTP Client | Requests |
+| Hypertext Transfer Protocol (HTTP) client | Requests |
 | Testing | Pytest |
-| Version Control | Git and GitHub |
+| Version control | Git and GitHub |
 
 ---
 
@@ -94,7 +99,7 @@ riseos/
     test_monitors.py
 ```
 
-The structure may evolve as the application grows.
+The structure may evolve as implementation validates the application’s internal boundaries.
 
 ---
 
@@ -102,7 +107,7 @@ The structure may evolve as the application grows.
 
 | Method | Endpoint | Description |
 |---|---|---|
-| GET | `/brief` | Returns the complete morning brief as JSON |
+| GET | `/brief` | Returns the complete morning brief as JavaScript Object Notation (JSON) |
 | GET | `/events` | Returns logged events |
 | GET | `/events?severity=high` | Filters events by severity |
 | GET | `/summary` | Returns aggregated event statistics |
@@ -138,47 +143,43 @@ pip install -r requirements.txt
 
 ## Configuration
 
-RiseOS uses environment variables for credentials and sensitive configuration values.
+RiseOS reads credentials and sensitive configuration values from environment variables.
 
-Create a local `.env` file based on the provided `.env.example` file:
-
-```bash
-cp .env.example .env
-```
-
-Add the required API credentials to `.env`:
+The current configuration expects these environment variables when their corresponding integrations are enabled:
 
 ```text
-OPENWEATHER_API_KEY=
-ALPHA_VANTAGE_API_KEY=
+OPENWEATHER_API_KEY
+ALPHA_VANTAGE_API_KEY
 ```
 
-Do not commit the `.env` file or any API credentials to version control.
+For local development, set the variables in the active shell before running RiseOS. Do not place real API credentials in `config.py`, commit them to Git, or include them in public examples.
 
-Hacker News and TheSportsDB do not currently require authentication for the planned integrations.
+Hacker News, MusicBrainz, and TheSportsDB do not currently require user authentication for the planned integrations.
 
-Music integration is deferred until a provider is selected.
+Support for loading a local `.env` file has not yet been implemented.
 
 ---
 
 ## Development Status
 
-RiseOS is under active development.
+RiseOS is under active development and is working toward Version 1.0.0.
 
 ### Completed
 
 - GitHub repository created
-- Initial README created
+- Initial project documentation created
 - Project folder structure scaffolded
 - Python virtual environment configured
 - Initial dependencies installed
 - `requirements.txt` generated
 - Initial configuration values added
+- Initial API-key loading from environment variables added
+- MusicBrainz selected as the planned music metadata provider
 
 ### In Progress
 
-- Completing application configuration
-- Adding secure environment-variable handling
+- Completing the application configuration
+- Defining configuration validation behavior
 - Building the SQLite database layer
 - Building the structured event logger
 
